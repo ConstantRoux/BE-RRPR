@@ -31,3 +31,6 @@ class MGD:
 
     def getPassageMatrix(self):
         return self.T01, self.T12, self.T23, self.T34, self.T45
+
+    def getT05(self):
+        return np.dot(self.T01, self.T12, self.T23, self.T34, self.T45)
