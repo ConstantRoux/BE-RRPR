@@ -1,5 +1,6 @@
 # This is a sample Python script.
-import MGD
+from MGD import MGD
+from math import pi
 
 
 # Press Maj+F10 to execute it or replace it with your code.
@@ -14,6 +15,8 @@ def print_hi(name):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print_hi('PyCharm')
-    mgd = MGD([0,0,0,0], 1, 1, 1, 1, 1, 1, 1)
+    mgd = MGD([0, pi/2, 0, 0], [1, 1], [1, 1, 1, 1, 1])
+    print(mgd.getT05())
+
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
