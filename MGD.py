@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class MGD:
@@ -43,11 +44,34 @@ class MGD:
                                 [0,     0,      0,      1]])
         return self.T[4]
 
-    def get_T05(self, q):
-        self.T05 = np.copy(self.get_T01(q[0]))
-        self.T05 = np.dot(self.T05, self.get_T12(q[1]))
-        self.T05 = np.dot(self.T05, self.get_T23(q[2]))
-        self.T05 = np.dot(self.T05, self.get_T34(q[3]))
-        self.T05 = np.dot(self.T05, self.get_T45())
+    def get_T0k(self, q, k):
+        funcs = [self.get_T01, self.get_T12, self.get_T23, self.get_T34, self.get_T45]
+        T0k = np.identity(4)
+        for i in range(0, k):
+            if i == 4:
+                T0k = np.dot(T0k, funcs[i]())
+            else:
+                T0k = np.dot(T0k, funcs[i](q[i]))
+        return T0k
 
+    def get_T05(self, q):
+        self.T05 = self.get_T0k(q, 5)
         return self.T05
+
+    def plot(self, q):
+        f, ax = plt.subplots()
+        ax = plt.axes(projection='3d')
+
+        labels = ['O_0', 'O_1', 'O_2', 'O_3', 'O_4', 'O_5']
+        c_r = np.zeros((12, 3))
+        for i in range(2, 12, 2):
+            c_r[i] = np.transpose(self.get_T0k(q, int(i / 2))[:-1, 3])
+            c_r[i, 2] = c_r[i - 1, 2]
+            c_r[i + 1] = np.transpose(self.get_T0k(q, int(i / 2))[:-1, 3])
+
+        for i, txt in enumerate(labels):
+            ax.text(c_r[2*i + 1, 0], c_r[2*i + 1, 1], c_r[2*i + 1, 2], txt, color='red')
+
+        ax.plot3D(c_r[:, 0], c_r[:, 1], c_r[:, 2])
+        plt.show()
+

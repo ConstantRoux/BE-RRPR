@@ -3,4 +3,4 @@ import numpy as np
 
 if __name__ == '__main__':
     rrpr = RRPR(np.array([1, 1]), np.array([1, 1, 1, 1, 1]))
-    print(rrpr.mgd.get_T05(np.array([np.pi / 2, 0, 3, 0])))
+    rrpr.mgd.plot(np.array([0.24*np.pi, 0.12, -2.24, 0.8*np.pi]))
