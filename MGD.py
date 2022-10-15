@@ -90,7 +90,7 @@ class MGD:
                     w1 = Y - self.L[4] * np.sin(theta)
                     w2 = -self.L[0] + X - self.L[4] * np.cos(theta)
                     z = self.L[2] + self.L[3]
-                    c2 = (w1 * w1 + w2 * w2 - self.L[1] * self.L[1] - z * z) / (2 * z * self.L[1])
+                    c2 = round((w1 * w1 + w2 * w2 - self.L[1] * self.L[1] - z * z) / (2 * z * self.L[1]), 2)
                     q2 = (math.atan2(np.sqrt(1- c2 * c2), c2)) % (2 * np.pi)
                     q2_bis = (math.atan2(-np.sqrt(1- c2 * c2), c2)) % (2 * np.pi)
                     x1 = Y - self.L[4] * np.sin(theta)
@@ -106,6 +106,8 @@ class MGD:
                     q4 = (theta - q1 - q2) % (2 * np.pi)
                     q4_bis = (theta - q1_bis - q2_bis) % (2 * np.pi)
                     q3 = Z - self.H[0] - self.H[1]
+
+                    print(c2)
                     print("%.2f" % q1, "%.2f" % q2, "%.2f" % q3, "%.2f" % q4)
                     print("%.2f" % q1_bis, "%.2f" % q2_bis, "%.2f" % q3, "%.2f" % q4_bis)
                     print()
