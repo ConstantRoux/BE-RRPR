@@ -82,13 +82,37 @@ class MGD:
                 ax.text(c_r[2 * i + 1, 0], c_r[2 * i + 1, 1], c_r[2 * i + 1, 2], txt, color='red')
                 if i == 5:
                     self.get_T05(q)
-                    theta = math.atan2(self.T05[1, 0], self.T05[0, 0]) * 180. / np.pi
+                    theta = math.atan2(self.T05[1, 0], self.T05[0, 0])
                     X = self.T05[0, 3]
                     Y = self.T05[1, 3]
                     Z = self.T05[2, 3]
+
+                    w1 = Y - self.L[4] * np.sin(theta)
+                    w2 = -self.L[0] + X - self.L[4] * np.cos(theta)
+                    z = self.L[2] + self.L[3]
+                    c2 = (w1 * w1 + w2 * w2 - self.L[1] * self.L[1] - z * z) / (2 * z * self.L[1])
+                    q2 = (math.atan2(np.sqrt(1- c2 * c2), c2)) % (2 * np.pi)
+                    q2_bis = (math.atan2(-np.sqrt(1- c2 * c2), c2)) % (2 * np.pi)
+                    x1 = Y - self.L[4] * np.sin(theta)
+                    x2 = self.L[0] - X + self.L[4] * np.cos(theta)
+                    y1 = -x2
+                    y2 = x1
+                    z1 = self.L[1] * np.cos(q2) + self.L[2] + self.L[3]
+                    z1_bis = self.L[1] * np.cos(q2_bis) + self.L[2] + self.L[3]
+                    z2 = -self.L[1] * np.sin(q2)
+                    z2_bis = -self.L[1] * np.sin(q2_bis)
+                    q1 = (math.atan2((z1*y2-z2*y1)/(x1*y2-x2*y1),(z2*x1-z1*x2)/(x1*y2-x2*y1)) - q2) % (2 * np.pi)
+                    q1_bis = (math.atan2((z1_bis*y2-z2_bis*y1)/(x1*y2-x2*y1),(z2_bis*x1-z1_bis*x2)/(x1*y2-x2*y1)) - q2_bis) % (2 * np.pi)
+                    q4 = (theta - q1 - q2) % (2 * np.pi)
+                    q4_bis = (theta - q1_bis - q2_bis) % (2 * np.pi)
+                    q3 = Z - self.H[0] - self.H[1]
+                    print("%.2f" % q1, "%.2f" % q2, "%.2f" % q3, "%.2f" % q4)
+                    print("%.2f" % q1_bis, "%.2f" % q2_bis, "%.2f" % q3, "%.2f" % q4_bis)
+                    print()
+
                     ax.text(c_r[2 * i + 1, 0], c_r[2 * i + 1, 1], c_r[2 * i + 1, 2]-0.5, r'$\theta={:.1f}, X={:.1f}, '
                                                                                          r'Y={:.1f}, '
-                                                                                         r'Z={:.1f}$'.format(theta,
+                                                                                         r'Z={:.1f}$'.format(theta * 180. / np.pi,
                                                                                                              X, Y, Z))
             ax.plot3D(c_r[:, 0], c_r[:, 1], c_r[:, 2], linewidth='10')
 
