@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
+import math
 
 
 class MGD:
@@ -61,12 +62,12 @@ class MGD:
         return self.T05
 
     def plot(self):
-        # plot config
         f, ax = plt.subplots()
+        ax_q = [None] * 4
+        sl_q = [None] * 4
         ax = plt.axes(projection='3d')
         f.subplots_adjust(left=0.30)
 
-        # MGD
         q = np.array([self.q_lim[0][0], self.q_lim[1][0], self.q_lim[2][0], self.q_lim[3][0]])
 
         def draw():
@@ -79,20 +80,27 @@ class MGD:
 
             for i, txt in enumerate(labels):
                 ax.text(c_r[2 * i + 1, 0], c_r[2 * i + 1, 1], c_r[2 * i + 1, 2], txt, color='red')
-
+                if i == 5:
+                    self.get_T05(q)
+                    theta = math.atan2(self.T05[1, 0], self.T05[0, 0]) * 180. / np.pi
+                    X = self.T05[0, 3]
+                    Y = self.T05[1, 3]
+                    Z = self.T05[2, 3]
+                    ax.text(c_r[2 * i + 1, 0], c_r[2 * i + 1, 1], c_r[2 * i + 1, 2]-0.5, r'$\theta={:.1f}, X={:.1f}, '
+                                                                                         r'Y={:.1f}, '
+                                                                                         r'Z={:.1f}$'.format(theta,
+                                                                                                             X, Y, Z))
             ax.plot3D(c_r[:, 0], c_r[:, 1], c_r[:, 2], linewidth='10')
 
-        # init figure
         draw()
 
-        ax_q = [None] * 4
-        sl_q = [None] * 4
         def update(value):
             for i in range(4):
-                q[i]=sl_q[i].val
+                q[i] = sl_q[i].val
             ax.clear()
             draw()
 
+        # sliders
         for i in range(4):
             ax_q[i] = f.add_axes([0.05 + 0.05 * i, 0.1, 0.0225, 0.8])
             sl_q[i] = Slider(
