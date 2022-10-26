@@ -123,3 +123,4 @@ class MGD:
             sl_q[i].on_changed(update)
 
         plt.show()
+

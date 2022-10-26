@@ -41,3 +41,4 @@ class MGI:
 
         return ((self.q1, self.q2, self.q3, self.q4),
                 (self.q1_bis, self.q2_bis, self.q3, self.q4_bis))
+
