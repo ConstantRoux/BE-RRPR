@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
+from MGI import MGI
 import math
 
 
@@ -11,6 +12,7 @@ class MGD:
         self.H = H
         self.L = L
         self.q_lim = q_lim
+        self.mgi = MGI(L, H)
 
     def get_T01(self, q1):
         self.T[0] = np.matrix([[np.cos(q1), -np.sin(q1), 0, self.L[0]],
@@ -87,27 +89,9 @@ class MGD:
                     Y = self.T05[1, 3]
                     Z = self.T05[2, 3]
 
-                    w1 = Y - self.L[4] * np.sin(theta)
-                    w2 = -self.L[0] + X - self.L[4] * np.cos(theta)
-                    z = self.L[2] + self.L[3]
-                    c2 = round((w1 * w1 + w2 * w2 - self.L[1] * self.L[1] - z * z) / (2 * z * self.L[1]), 2)
-                    q2 = (math.atan2(np.sqrt(1- c2 * c2), c2)) % (2 * np.pi)
-                    q2_bis = (math.atan2(-np.sqrt(1- c2 * c2), c2)) % (2 * np.pi)
-                    x1 = Y - self.L[4] * np.sin(theta)
-                    x2 = self.L[0] - X + self.L[4] * np.cos(theta)
-                    y1 = -x2
-                    y2 = x1
-                    z1 = self.L[1] * np.cos(q2) + self.L[2] + self.L[3]
-                    z1_bis = self.L[1] * np.cos(q2_bis) + self.L[2] + self.L[3]
-                    z2 = -self.L[1] * np.sin(q2)
-                    z2_bis = -self.L[1] * np.sin(q2_bis)
-                    q1 = (math.atan2((z1*y2-z2*y1)/(x1*y2-x2*y1),(z2*x1-z1*x2)/(x1*y2-x2*y1)) - q2) % (2 * np.pi)
-                    q1_bis = (math.atan2((z1_bis*y2-z2_bis*y1)/(x1*y2-x2*y1),(z2_bis*x1-z1_bis*x2)/(x1*y2-x2*y1)) - q2_bis) % (2 * np.pi)
-                    q4 = (theta - q1 - q2) % (2 * np.pi)
-                    q4_bis = (theta - q1_bis - q2_bis) % (2 * np.pi)
-                    q3 = Z - self.H[0] - self.H[1]
+                    ((q1, q2, q3, q4),
+                     (q1_bis, q2_bis, q3, q4_bis)) = self.mgi.getQi(X, Y, Z, theta)
 
-                    print(c2)
                     print("%.2f" % q1, "%.2f" % q2, "%.2f" % q3, "%.2f" % q4)
                     print("%.2f" % q1_bis, "%.2f" % q2_bis, "%.2f" % q3, "%.2f" % q4_bis)
                     print()
@@ -139,3 +123,4 @@ class MGD:
             sl_q[i].on_changed(update)
 
         plt.show()
+
