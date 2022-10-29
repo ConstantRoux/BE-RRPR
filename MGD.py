@@ -63,7 +63,7 @@ class MGD:
         self.T05 = self.get_T0k(q, 5)
         return self.T05
 
-    def plot(self):
+    def plot3D(self):
         f, ax = plt.subplots()
         ax_q = [None] * 4
         sl_q = [None] * 4

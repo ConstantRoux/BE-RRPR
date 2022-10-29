@@ -1,5 +1,5 @@
 import numpy as np
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt, animation
 from matplotlib.widgets import Slider
 from matplotlib.widgets import Button
 
@@ -64,7 +64,6 @@ class Line:
         draw(0)
 
         plt.show()
-
 
     def get_s(self, A, B, V):
         d = np.linalg.norm(B - A)
