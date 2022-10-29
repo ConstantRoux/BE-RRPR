@@ -1,7 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt, animation
 from matplotlib.widgets import Slider
-from matplotlib.widgets import Button
 
 
 class Line:
@@ -35,35 +34,54 @@ class Line:
     def plot3D_M(self, A, B, V, theta=0):
         f, ax = plt.subplots()
         ax = plt.axes(projection='3d')
-        f.subplots_adjust(left=0.15)
-        sl, ax_sl = None, None
-
         t, M, _, _ = self.get_M(A, B, V)
+        ax.scatter(A[0], A[1], A[2], color='red')
+        ax.text(A[0, 0], A[1, 0], A[2, 0] - 0.1, 'A({:.1f},{:.1f},{:.1f})'.format(A[0, 0], A[1, 0], A[2, 0]))
+        ax.scatter(B[0], B[1], B[2], color='red')
+        ax.text(B[0, 0], B[1, 0], B[2, 0] - 0.1, 'B({:.1f},{:.1f},{:.1f})'.format(B[0, 0], B[1, 0], B[2, 0]))
+        data, = ax.plot([M[0, 0], M[0, 0] + 0.1*np.cos(theta)], [M[1, 0], M[1, 0] + 0.1 * np.sin(theta)], [M[2, 0], M[2, 0]], 'b')
 
-        def draw(t_current):
-            print(t_current)
-            ax.scatter(A[0], A[1], A[2], color='red')
-            ax.scatter(B[0], B[1], B[2], color='red')
-            ax.scatter(M[0, t_current], M[1, t_current], M[2, t_current], color='blue')
-            ax.plot([M[0, t_current], M[0, t_current] + 0.1*np.cos(theta)], [M[1, t_current], M[1, t_current] + 0.1 * np.sin(theta)], [M[2, t_current], M[2, t_current]], color='blue')
+        def animate(i):
+            data.set_data([M[0, i], M[0, i] + 0.1*np.cos(theta)], [M[1, i], M[1, i] + 0.1 * np.sin(theta)])
+            data.set_3d_properties([M[2, i], M[2, i]])
+            return data,
 
-        def update(value):
-            ax.clear()
-            draw(value)
-
-        ax_sl = f.add_axes([0.05, 0.1, 0.0225, 0.8])
-        sl = Slider(ax=ax_sl,
-                    label="k.Te",
-                    valmin=0,
-                    valmax=t.shape[0]-1,
-                    valinit=0,
-                    valstep=1,
-                    orientation="vertical")
-        sl.on_changed(update)
-
-        draw(0)
+        anim = animation.FuncAnimation(f, animate, frames=t.shape[0], interval=self.Te, blit=True)
 
         plt.show()
+
+    # def plot3D_M(self, A, B, V, theta=0):
+    #     f, ax = plt.subplots()
+    #     ax = plt.axes(projection='3d')
+    #     f.subplots_adjust(left=0.15)
+    #     sl, ax_sl = None, None
+    #
+    #     t, M, _, _ = self.get_M(A, B, V)
+    #
+    #     def draw(t_current):
+    #         print(t_current)
+    #         ax.scatter(A[0], A[1], A[2], color='red')
+    #         ax.scatter(B[0], B[1], B[2], color='red')
+    #         ax.scatter(M[0, t_current], M[1, t_current], M[2, t_current], color='blue')
+    #         ax.plot([M[0, t_current], M[0, t_current] + 0.1*np.cos(theta)], [M[1, t_current], M[1, t_current] + 0.1 * np.sin(theta)], [M[2, t_current], M[2, t_current]], color='blue')
+    #
+    #     def update(value):
+    #         ax.clear()
+    #         draw(value)
+    #
+    #     ax_sl = f.add_axes([0.05, 0.1, 0.0225, 0.8])
+    #     sl = Slider(ax=ax_sl,
+    #                 label="k.Te",
+    #                 valmin=0,
+    #                 valmax=t.shape[0]-1,
+    #                 valinit=0,
+    #                 valstep=1,
+    #                 orientation="vertical")
+    #     sl.on_changed(update)
+    #
+    #     draw(0)
+    #
+    #     plt.show()
 
     def get_s(self, A, B, V):
         d = np.linalg.norm(B - A)
