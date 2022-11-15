@@ -11,7 +11,7 @@ class MGI:
 
     def get_Qi(self, X, Y, Z, theta):
         self.update_Qi(X, Y, Z, theta)
-        return self.Qi
+        return self.Qi[:, 0], self.Qi[:, 1]
 
     def update_Qi(self, X, Y, Z, theta):
         w1 = Y - self.L[4] * np.sin(theta)
@@ -35,4 +35,4 @@ class MGI:
         self.Qi[3, 0] = (theta - self.Qi[0, 0] - self.Qi[1, 0]) % (2 * np.pi)
         self.Qi[3, 1] = (theta - self.Qi[0, 1] - self.Qi[1, 1]) % (2 * np.pi)
         self.Qi[2, 0] = Z - self.H[0] - self.H[1]
-        self.Qi[2, 0] = self.Qi[2, 1]
+        self.Qi[2, 1] = Z - self.H[0] - self.H[1]
