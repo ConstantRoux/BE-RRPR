@@ -14,12 +14,10 @@ class MDD:
             [-P12, -P22, 0, 0],
             [P11, P21, 0, 0],
             [0, 0, 1, 0],
-            [0, 0, 0, 0],
-            [0, 0, 0, 0],
             [1, 1, 0, 1]]
 
 
         return J
 
-    def getJacobienneInv(self):
-        return np.linalg.inv(self.J)
+
+
