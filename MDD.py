@@ -21,5 +21,5 @@ class MDD:
 
         return J
 
-    def getJacobienneInv(self):
-        return np.linalg.inv(self.J)
+
+
