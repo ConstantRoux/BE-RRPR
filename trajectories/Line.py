@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt, animation
-from MGI import MGI
+from models.MGI import MGI
 
 
 class Line:
@@ -30,7 +30,6 @@ class Line:
         axs[1].scatter(t, q_bis[1], c='green', s=2)
         axs[1].legend(['q2', 'q2 bis'])
         axs[1].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
-
 
         axs[2].scatter(t, q[2], c='blue', s=2)
         axs[2].scatter(t, q_bis[2], c='green', s=2)
@@ -65,7 +64,7 @@ class Line:
 
         return t, M, dM, d2M
 
-    def plot_M(self, A, B, V, theta=0):
+    def plot_M(self, A, B, V):
         fig, axs = plt.subplots(3, 3)
 
         t, M, dM, d2M = self.get_M(A, B, V)
