@@ -5,6 +5,7 @@ from matplotlib.widgets import Slider
 
 from models.MGI import MGI
 from models.MGD import MGD
+from models.MDI import MDI
 
 
 class Line:
@@ -14,16 +15,28 @@ class Line:
         self.L = L
 
     def traj(self, A, B, V, theta=0):
+        # get trajectories
         t, M, dM, d2M = self.get_M(A, B, V)
+
+        # get q
         mgi = MGI(self.H, self.L)
         q = np.zeros((4, t.shape[0]))
         q_bis = np.zeros((4, t.shape[0]))
         for i in range(t.shape[0]):
             q[:, i], q_bis[:, i] = mgi.get_Qi(M[0, i], M[1, i], M[2, i], theta)
-        return t, q, q_bis
+
+        # get dq
+        mdi = MDI(self.L)
+        dq = np.zeros((4, t.shape[0]))
+        dq_bis = np.zeros((4, t.shape[0]))
+        for i in range(t.shape[0]):
+            dq[:, i] = mdi.get_dq(np.append(dM[:, i], theta), q[:, i])
+            dq_bis[:, i] = mdi.get_dq(np.append(dM[:, i], theta), q_bis[:, i])
+
+        return t, q, q_bis, dq, dq_bis
 
     def plot_Q(self, A, B, V, theta=0):
-        t, q, q_bis = self.traj(A, B, V, theta)
+        t, q, q_bis, _, _ = self.traj(A, B, V, theta)
         fig, axs = plt.subplots(4)
         axs[0].scatter(t, q[0], c='blue', s=2)
         axs[0].scatter(t, q_bis[0], c='green', s=2)
@@ -47,6 +60,31 @@ class Line:
 
         plt.show()
 
+    def plot_dQ(self, A, B, V, theta=0):
+        t, q, q_bis, dq, dq_bis = self.traj(A, B, V, theta)
+        fig, axs = plt.subplots(4)
+        axs[0].scatter(t, dq[0], c='blue', s=2)
+        axs[0].scatter(t, dq_bis[0], c='green', s=2)
+        axs[0].legend([r'$\dot{q}_1$', '$\dot{q}_{1bis}$'])
+        axs[0].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
+
+        axs[1].scatter(t, dq[1], c='blue', s=2)
+        axs[1].scatter(t, dq_bis[1], c='green', s=2)
+        axs[1].legend([r'$\dot{q}_2$', '$\dot{q}_{2bis}$'])
+        axs[1].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
+
+        axs[2].scatter(t, dq[2], c='blue', s=2)
+        axs[2].scatter(t, dq_bis[2], c='green', s=2)
+        axs[2].legend([r'$\dot{q}_3$', '$\dot{q}_{3bis}$'])
+        axs[2].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
+
+        axs[3].scatter(t, dq[3], c='blue', s=2)
+        axs[3].scatter(t, dq_bis[3], c='green', s=2)
+        axs[3].legend([r'$\dot{q}_4$', '$\dot{q}_{4bis}$'])
+        axs[3].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
+
+        plt.show()
+
     def plot3D_Q(self, A, B, V, theta=0):
         f, ax = plt.subplots()
         ax_q = [None]
@@ -54,7 +92,7 @@ class Line:
         ax = plt.axes(projection='3d')
         f.subplots_adjust(left=0.1)
 
-        t, q, q_bis = self.traj(A, B, V, theta)
+        t, q, q_bis, _, _ = self.traj(A, B, V, theta)
         mgd = MGD(self.H, self.L, None)
         mgd2 = MGD(self.H, self.L, None)
         j = np.array([0])

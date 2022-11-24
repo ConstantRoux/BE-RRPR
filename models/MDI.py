@@ -1,11 +1,13 @@
 import numpy as np
-import MDD
+from models.MDD import MDD
 
 
 class MDI:
     def __init__(self, L):
         self.L = L
+        self.mdd = MDD(L)
 
-    def getConfigsPoint(self, x_point, q1, q2, q3, q4):
-        q_point = np.linalg.inv(MDD.MDD.getJacobienne(q1, q2, q3, q4)) * x_point
-        return q_point
+    def get_dq(self, dM, q):
+        inv_J = np.linalg.inv(self.mdd.get_jacobienne(q))
+        dq = np.dot(inv_J, np.transpose(dM))
+        return dq

@@ -87,7 +87,6 @@ class Helix:
                     Y = mgd2.T05[1, 3]
                     Z = mgd2.T05[2, 3]
 
-
             ax.plot3D(c_r[:, 0], c_r[:, 1], c_r[:, 2], linewidth='5', color='blue')
             ax.plot3D(c_r2[:, 0], c_r2[:, 1], c_r2[:, 2], linewidth='5', color='green')
 

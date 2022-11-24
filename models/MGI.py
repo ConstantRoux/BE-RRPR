@@ -28,6 +28,7 @@ class MGI:
         z1_bis = self.L[1] * np.cos(self.Qi[1, 1]) + self.L[2] + self.L[3]
         z2 = -self.L[1] * np.sin(self.Qi[1, 0])
         z2_bis = -self.L[1] * np.sin(self.Qi[1, 1])
+
         self.Qi[0, 0] = (math.atan2((z1 * y2 - z2 * y1) / (x1 * y2 - x2 * y1),
                               (z2 * x1 - z1 * x2) / (x1 * y2 - x2 * y1)) - self.Qi[1, 0]) % (2 * np.pi)
         self.Qi[0, 1] = (math.atan2((z1_bis * y2 - z2_bis * y1) / (x1 * y2 - x2 * y1),
