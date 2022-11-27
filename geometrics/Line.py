@@ -3,19 +3,18 @@ import math
 from matplotlib import pyplot as plt, animation
 from matplotlib.widgets import Slider
 
+from geometrics.Geometric import Geometric
 from models.MGI import MGI
 from models.MGD import MGD
 from models.MDI import MDI
 
 
-class Line:
-    def __init__(self, Te, H, L):
-        self.Te = Te
-        self.H = H
-        self.L = L
+class Line(Geometric):
+    def __init__(self, law, H, L):
+        super().__init__(law, H, L)
 
     def traj(self, A, B, V, theta=0):
-        # get trajectories
+        # get geometrics
         t, M, dM, d2M = self.get_M(A, B, V)
 
         # get q
@@ -65,22 +64,22 @@ class Line:
         fig, axs = plt.subplots(4)
         axs[0].scatter(t, dq[0], c='blue', s=2)
         axs[0].scatter(t, dq_bis[0], c='green', s=2)
-        axs[0].legend([r'$\dot{q}_1$', '$\dot{q}_{1bis}$'])
+        axs[0].legend([r'$\dot{q}_1$', r'$\dot{q}_{1bis}$'])
         axs[0].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
 
         axs[1].scatter(t, dq[1], c='blue', s=2)
         axs[1].scatter(t, dq_bis[1], c='green', s=2)
-        axs[1].legend([r'$\dot{q}_2$', '$\dot{q}_{2bis}$'])
+        axs[1].legend([r'$\dot{q}_2$', r'$\dot{q}_{2bis}$'])
         axs[1].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
 
         axs[2].scatter(t, dq[2], c='blue', s=2)
         axs[2].scatter(t, dq_bis[2], c='green', s=2)
-        axs[2].legend([r'$\dot{q}_3$', '$\dot{q}_{3bis}$'])
+        axs[2].legend([r'$\dot{q}_3$', r'$\dot{q}_{3bis}$'])
         axs[2].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
 
         axs[3].scatter(t, dq[3], c='blue', s=2)
         axs[3].scatter(t, dq_bis[3], c='green', s=2)
-        axs[3].legend([r'$\dot{q}_4$', '$\dot{q}_{4bis}$'])
+        axs[3].legend([r'$\dot{q}_4$', r'$\dot{q}_{4bis}$'])
         axs[3].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
 
         plt.show()
@@ -134,7 +133,8 @@ class Line:
 
                     ax.text(c_r[2 * i + 1, 0], c_r[2 * i + 1, 1], c_r[2 * i + 1, 2] - 0.5, r'$\theta={:.1f}, X={:.1f}, '
                                                                                            r'Y={:.1f}, '
-                                                                                           r'Z={:.1f}$'.format(theta * 180. / np.pi, X, Y, Z))
+                                                                                           r'Z={:.1f}$'.format(
+                        theta * 180. / np.pi, X, Y, Z))
 
                     mgd2.get_T05(q_bis[:, j[0]])
                     theta = math.atan2(mgd2.T05[1, 0], mgd2.T05[0, 0])
@@ -142,6 +142,10 @@ class Line:
                     Y = mgd2.T05[1, 3]
                     Z = mgd2.T05[2, 3]
 
+            ax.set_aspect('equal')
+            ax.axes.set_xlim3d(left=-np.sum(self.L), right=np.sum(self.L))
+            ax.axes.set_ylim3d(bottom=-np.sum(self.L), top=np.sum(self.L))
+            ax.axes.set_zlim3d(bottom=-np.sum(self.L), top=np.sum(self.L))
             ax.plot3D(c_r[:, 0], c_r[:, 1], c_r[:, 2], linewidth='5', color='blue')
             ax.plot3D(c_r2[:, 0], c_r2[:, 1], c_r2[:, 2], linewidth='5', color='green')
 
@@ -153,7 +157,7 @@ class Line:
             ax=ax_q,
             label='k.Te',
             valmin=0,
-            valmax=t.shape[0]-1,
+            valmax=t.shape[0] - 1,
             valfmt='%0.0f',
             valinit=0,
             orientation="vertical")
@@ -163,7 +167,7 @@ class Line:
 
     def get_M(self, A, B, V):
         # abscisse curviligne et ses dérivées
-        t, s_dis, s_vit, s_acc = self.get_s(A, B, V)
+        t, s_dis, s_vit, s_acc = self.law.get_s(np.linalg.norm(B - A), V)
 
         # vecteur directeur
         U = B - A
@@ -223,90 +227,24 @@ class Line:
     def plot3D_M(self, A, B, V, theta=0):
         f, ax = plt.subplots()
         ax = plt.axes(projection='3d')
+        ax.set_aspect('equal')
+        ax.axes.set_xlim3d(left=-np.sum(self.L), right=np.sum(self.L))
+        ax.axes.set_ylim3d(bottom=-np.sum(self.L), top=np.sum(self.L))
+        ax.axes.set_zlim3d(bottom=-np.sum(self.L), top=np.sum(self.L))
         t, M, _, _ = self.get_M(A, B, V)
         ax.scatter(M[0, ::3], M[1, ::3], M[2, ::3], s=2)
         ax.scatter(A[0], A[1], A[2], color='red')
         ax.text(A[0, 0], A[1, 0], A[2, 0] - 0.1, 'A({:.1f},{:.1f},{:.1f})'.format(A[0, 0], A[1, 0], A[2, 0]))
         ax.scatter(B[0], B[1], B[2], color='red')
         ax.text(B[0, 0], B[1, 0], B[2, 0] - 0.1, 'B({:.1f},{:.1f},{:.1f})'.format(B[0, 0], B[1, 0], B[2, 0]))
-        data, = ax.plot([M[0, 0], M[0, 0] + 0.1*np.cos(theta)], [M[1, 0], M[1, 0] + 0.1 * np.sin(theta)], [M[2, 0], M[2, 0]], 'b')
+        data, = ax.plot([M[0, 0], M[0, 0] + 0.1 * np.cos(theta)], [M[1, 0], M[1, 0] + 0.1 * np.sin(theta)],
+                        [M[2, 0], M[2, 0]], 'b')
 
         def animate(i):
-            data.set_data([M[0, i], M[0, i] + 0.1*np.cos(theta)], [M[1, i], M[1, i] + 0.1 * np.sin(theta)])
+            data.set_data([M[0, i], M[0, i] + 0.1 * np.cos(theta)], [M[1, i], M[1, i] + 0.1 * np.sin(theta)])
             data.set_3d_properties([M[2, i], M[2, i]])
             return data,
 
-        anim = animation.FuncAnimation(f, animate, frames=t.shape[0], interval=self.Te, blit=True)
+        anim = animation.FuncAnimation(f, animate, frames=t.shape[0], interval=self.law.Te, blit=True)
 
-        plt.show()
-
-    def get_s(self, A, B, V):
-        d = np.linalg.norm(B - A)
-        t, s_dis = self.__get_s_dis(V, d)
-        t, s_vit = self.__get_s_vit(V, d)
-        t, s_acc = self.__get_s_acc(V, d)
-
-        return t, s_dis, s_vit, s_acc
-
-    def __get_s_dis(self, V, d):
-        # time
-        t1 = d / V
-        t2 = 2 * t1
-        t = np.arange(0, t2 + self.Te, self.Te)
-        t[-1] = t2
-
-        # abscisse rectiligne
-        s_t = np.zeros((t.shape[0],))
-        s_t[0:int(t.shape[0] / 2)] = V / (t1 * 2) * t[0:int(t.shape[0] / 2)] ** 2
-        s_t[int(t.shape[0] / 2):] = -V / (t1 * 2) * t[int(t.shape[0] / 2):] ** 2 + 2 * V * t[int(t.shape[0] / 2):] - d
-
-        return t, s_t
-
-    def __get_s_vit(self, V, d):
-        # time
-        t1 = d / V
-        t2 = 2 * t1
-        t = np.arange(0, t2 + self.Te, self.Te)
-        t[-1] = t2
-
-        # abscisse rectiligne
-        sd_t = np.zeros((t.shape[0],))
-        sd_t[0:int(t.shape[0] / 2)] = (V / t1) * t[0:int(t.shape[0] / 2)]
-        sd_t[int(t.shape[0] / 2):] = (-V / t1) * t[int(t.shape[0] / 2):] + 2 * V
-
-        return t, sd_t
-
-    def __get_s_acc(self, V, d):
-        # time
-        t1 = d / V
-        t2 = 2 * t1
-        t = np.arange(0, t2 + self.Te, self.Te)
-        t[-1] = t2
-
-        # abscisse rectiligne
-        sa_t = np.zeros((t.shape[0],))
-        sa_t[0:int(t.shape[0] / 2)] = V / t1
-        sa_t[int(t.shape[0] / 2):] = -V / t1
-
-        return t, sa_t
-
-    def plot_s(self, A, B, V):
-        t, s_dis, s_vit, s_acc = self.get_s(A, B, V)
-
-        fig, axs = plt.subplots(3)
-        fig.suptitle('Abscisse rectiligne et ses dérivées')
-
-        axs[0].scatter(t, s_dis, s=1)
-        axs[0].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
-        axs[0].set_title("Abscisse rectiligne en fonction du temps")
-
-        axs[1].scatter(t, s_vit, s=1)
-        axs[1].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
-        axs[1].set_title("Vitesse de l'abscisse rectiligne en fonction du temps")
-
-        axs[2].scatter(t, s_acc, s=1)
-        axs[2].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
-        axs[2].set_title("Accélération de l'abscisse rectiligne en fonction du temps")
-
-        fig.subplots_adjust(hspace=1)
         plt.show()

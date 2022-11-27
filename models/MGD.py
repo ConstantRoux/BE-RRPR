@@ -68,6 +68,7 @@ class MGD:
         ax_q = [None] * 4
         sl_q = [None] * 4
         ax = plt.axes(projection='3d')
+        ax.set_proj_type('ortho')
         f.subplots_adjust(left=0.30)
 
         q = np.array([self.q_lim[0][0], self.q_lim[1][0], self.q_lim[2][0], self.q_lim[3][0]])
@@ -89,19 +90,15 @@ class MGD:
                     Y = self.T05[1, 3]
                     Z = self.T05[2, 3]
 
-                    # ((q1, q2, q3, q4),
-                    #  (q1_bis, q2_bis, q3, q4_bis)) = self.mgi.getQi(X, Y, Z, theta)
-                    #
-                    # print("%.2f" % q1, "%.2f" % q2, "%.2f" % q3, "%.2f" % q4)
-                    # print("%.2f" % q1_bis, "%.2f" % q2_bis, "%.2f" % q3, "%.2f" % q4_bis)
-                    # print()
-
                     ax.text(c_r[2 * i + 1, 0], c_r[2 * i + 1, 1], c_r[2 * i + 1, 2]-0.5, r'$\theta={:.1f}, X={:.1f}, '
                                                                                          r'Y={:.1f}, '
                                                                                          r'Z={:.1f}$'.format(theta * 180. / np.pi,
                                                                                                              X, Y, Z))
+            ax.set_aspect('equal')
+            ax.axes.set_xlim3d(left=-np.sum(self.L), right=np.sum(self.L))
+            ax.axes.set_ylim3d(bottom=-np.sum(self.L), top=np.sum(self.L))
+            ax.axes.set_zlim3d(bottom=-np.sum(self.L), top=np.sum(self.L))
             ax.plot3D(c_r[:, 0], c_r[:, 1], c_r[:, 2], linewidth='10')
-            print(c_r)
 
         draw()
 
@@ -124,4 +121,3 @@ class MGD:
             sl_q[i].on_changed(update)
 
         plt.show()
-
