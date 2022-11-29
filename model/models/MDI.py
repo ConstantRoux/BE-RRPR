@@ -1,5 +1,5 @@
 import numpy as np
-from models.MDD import MDD
+from model.models.MDD import MDD
 
 
 class MDI:

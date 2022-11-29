@@ -2,8 +2,8 @@ import numpy as np
 import math
 from matplotlib import pyplot as plt
 from matplotlib.widgets import Slider
-from models.MGI import MGI
-from models.MGD import MGD
+from model.models.MGI import MGI
+from model.models.MGD import MGD
 
 
 class Helix:

@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from geometrics.Geometric import Geometric
+from model.geometrics.Geometric import Geometric
 import numpy as np
 
 

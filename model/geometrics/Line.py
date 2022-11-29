@@ -3,10 +3,10 @@ import math
 from matplotlib import pyplot as plt, animation
 from matplotlib.widgets import Slider
 
-from geometrics.Geometric import Geometric
-from models.MGI import MGI
-from models.MGD import MGD
-from models.MDI import MDI
+from model.geometrics.Geometric import Geometric
+from model.models.MGI import MGI
+from model.models.MGD import MGD
+from model.models.MDI import MDI
 
 
 class Line(Geometric):

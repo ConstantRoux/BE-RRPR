@@ -12,6 +12,10 @@ class Geometric(ABC):
         pass
 
     @abstractmethod
+    def is_reachable(self):
+        pass
+
+    @abstractmethod
     def plot_Q(self):
         pass
 

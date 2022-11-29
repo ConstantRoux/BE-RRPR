@@ -1,7 +1,5 @@
-from commands.SpeedTriangleLaw import SpeedTriangleLaw
-from geometrics.ArcXY import ArcXY
-from geometrics.Line import Line
-from models.MGD import MGD
+from model.commands import SpeedTriangleLaw
+from model.geometrics.ArcXY import ArcXY
 import numpy as np
 
 
