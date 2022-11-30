@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-from model.commands.Law import Law
+from model.laws.Law import Law
 
 
 class SpeedTriangleLaw(Law):

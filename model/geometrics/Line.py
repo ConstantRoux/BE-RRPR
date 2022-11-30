@@ -34,6 +34,9 @@ class Line(Geometric):
 
         return t, q, q_bis, dq, dq_bis
 
+    def is_reachable(self):
+        pass
+
     def plot_Q(self, A, B, V, theta=0):
         t, q, q_bis, _, _ = self.traj(A, B, V, theta)
         fig, axs = plt.subplots(4)

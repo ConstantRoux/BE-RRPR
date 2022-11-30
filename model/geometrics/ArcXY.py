@@ -4,9 +4,9 @@ from matplotlib.widgets import Slider
 from model.geometrics.Geometric import Geometric
 import numpy as np
 
-from models.MDI import MDI
-from models.MGD import MGD
-from models.MGI import MGI
+from model.models.MDI import MDI
+from model.models.MGD import MGD
+from model.models.MGI import MGI
 
 
 class ArcXY(Geometric):
@@ -33,6 +33,9 @@ class ArcXY(Geometric):
             dq_bis[:, i] = mdi.get_dq(np.append(dM[:, i], theta), q_bis[:, i])
 
         return t, q, q_bis, dq, dq_bis
+
+    def is_reachable(self):
+        pass
 
     def plot_Q(self):
         pass
@@ -127,8 +130,8 @@ class ArcXY(Geometric):
 
         # distance de l'arc r.theta
         r = np.linalg.norm(C - A)
-        th_A = (np.arctan2(A[1] - C[1], A[0] - C[0]) + 2 * np.pi) % (2 * np.pi)
-        th_B = (np.arctan2(B[1] - C[1], B[0] - C[0]) + 2 * np.pi) % (2 * np.pi)
+        th_A = (np.arctan2(float(A[1] - C[1]), float(A[0] - C[0])) + 2 * np.pi) % (2 * np.pi)
+        th_B = (np.arctan2(float(B[1] - C[1]), float(B[0] - C[0])) + 2 * np.pi) % (2 * np.pi)
         angle = (th_B - th_A + 2 * np.pi) % (2 * np.pi)
         if clockwise:
             angle = 2 * np.pi - angle
@@ -141,6 +144,7 @@ class ArcXY(Geometric):
         M = np.zeros((3, t.shape[0]))
         M[0, :] = C[0] + r * np.cos(way * angle * s_dis / d + th_A)
         M[1, :] = C[1] + r * np.sin(way * angle * s_dis / d + th_A)
+        M[2, :] = np.ones((1, t.shape[0])) * A[2]
 
         # calcul de dM
         dM = np.zeros((3, t.shape[0]))
@@ -191,6 +195,7 @@ class ArcXY(Geometric):
 
         fig.subplots_adjust(hspace=0.5, wspace=0.25)
         plt.show()
+
     def plot3D_M(self):
         pass
 
