@@ -74,7 +74,7 @@ class MGD:
         q = np.array([self.q_lim[0][0], self.q_lim[1][0], self.q_lim[2][0], self.q_lim[3][0]])
 
         def draw():
-            labels = ['O_0', 'O_1', 'O_2', 'O_3', 'O_4', 'O_5']
+            labels = [r'$O_0$', r'$O_1$', r'$O_2$', r'$O_3$', r'$O_4$', r'$O_5$']
             c_r = np.zeros((12, 3))
             for i in range(2, 12, 2):
                 c_r[i] = np.transpose(self.get_T0k(q, int(i / 2))[:-1, 3])
@@ -98,7 +98,7 @@ class MGD:
             ax.axes.set_xlim3d(left=-np.sum(self.L), right=np.sum(self.L))
             ax.axes.set_ylim3d(bottom=-np.sum(self.L), top=np.sum(self.L))
             ax.axes.set_zlim3d(bottom=-np.sum(self.L), top=np.sum(self.L))
-            ax.plot3D(c_r[:, 0], c_r[:, 1], c_r[:, 2], linewidth='10')
+            ax.plot3D(c_r[:, 0], c_r[:, 1], c_r[:, 2], linewidth='2')
 
         draw()
 

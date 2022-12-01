@@ -35,18 +35,22 @@ class GcodeInterpreter:
 
     def get_M(self):
         M_t = np.zeros((3, 1))
+        t_t = np.zeros((1,))
         for command in self.commands:
             if command.type == "line":
-                _, M, _, _ = Line(self.law, self.H, self.L).get_M(self.current_pos, command.B, self.V)
+                t, M, _, _ = Line(self.law, self.H, self.L).get_M(self.current_pos, command.B, self.V)
                 M_t = np.append(M_t, M, axis=1)
+                t_t = np.append(t_t, t + t_t[-1])
             elif command.type == "clockwise":
-                _, M, _, _M = ArcXY(self.law, self.H, self.L).get_M(self.current_pos, command.B, command.C, self.V, True)
+                t, M, _, _M = ArcXY(self.law, self.H, self.L).get_M(self.current_pos, command.B, command.C, self.V, True)
                 M_t = np.append(M_t, M, axis=1)
+                t_t = np.append(t_t, t + t_t[-1])
             elif command.type == "anticlockwise":
-                _, M, _, _ = ArcXY(self.law, self.H, self.L).get_M(self.current_pos, command.B, command.C, self.V, False)
+                t, M, _, _ = ArcXY(self.law, self.H, self.L).get_M(self.current_pos, command.B, command.C, self.V, False)
                 M_t = np.append(M_t, M, axis=1)
+                t_t = np.append(t_t, t + t_t[-1])
             self.current_pos = command.B
-        return M_t
+        return t_t, M_t
 
     def get_Q(self):
         pass
