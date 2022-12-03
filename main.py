@@ -17,7 +17,7 @@ if __name__ == '__main__':
     V = 1
     Te = 0.01
     H = np.array([1, 1])
-    L = np.array([1/4, 4, 2, 2, 1/4])
+    L = np.array([2, 4, 2, 2, 2])
 
     # loi de commande
     law = SpeedTriangleLaw(Te)
@@ -48,9 +48,12 @@ if __name__ == '__main__':
     c.plot3D_Q(t, M, q, q_bis)
 
     # gcode interpreter
-    interpreter = GcodeInterpreter(law, H, L, V, 'input/test.gcode')
+    L = np.array([2, 16, 8, 8, 2])
+    interpreter = GcodeInterpreter(law, H, L, V, 'input/upssitech.gcode')
     interpreter.read_lines()
     interpreter.get_commands()
     t, M = interpreter.get_M()
+    q, q_bis = interpreter.get_Q(t, M, theta)
     g = GcodePath(law, H, L)
     g.plot3D_M(t, M, theta)
+    g.plot3D_Q(t, M, q, q_bis, step=25)

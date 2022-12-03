@@ -70,7 +70,7 @@ class Geometric(ABC):
 
         plt.show()
 
-    def plot3D_Q(self, t, M, q, q_bis):
+    def plot3D_Q(self, t, M, q, q_bis, step=1):
         f, ax = plt.subplots()
         ax_q = [None]
         sl_q = [None]
@@ -89,7 +89,7 @@ class Geometric(ABC):
             draw()
 
         def draw():
-            ax.scatter(M[0], M[1], M[2], color='red', s=0.5)
+            ax.scatter(M[0, ::step], M[1, ::step], M[2, ::step], color='red', s=0.5)
 
             ax.text(M[0, 0], M[1, 0], M[2, 0], 'A', color='red')
 

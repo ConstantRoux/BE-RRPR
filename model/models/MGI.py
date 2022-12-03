@@ -54,12 +54,12 @@ class MGI:
             s12_bis = np.sign(z1_bis * y2 - z2_bis * y1) * np.Inf
 
         # cas où s12, c12 ~= 0, 0 => singularité
-        if (np.abs(z1 * y2 - z2 * y1) < 1e-10) and (np.abs(z2 * x1 - z1 * x2) < 1e-10):
+        if (np.abs(z1 * y2 - z2 * y1) == 0) and (np.abs(z2 * x1 - z1 * x2) == 0):
             self.Qi[0, 0] = (np.arctan2(np.sqrt(1 - c2 * c2), c2)) % (2 * np.pi)
         else:
             self.Qi[0, 0] = (np.arctan2(s12, c12) - self.Qi[1, 0]) % (2 * np.pi)
 
-        if (np.abs(z1_bis * y2 - z2_bis * y1) < 1e-10) and (np.abs(z2_bis * x1 - z1_bis * x2) < 1e-10):
+        if (np.abs(z1_bis * y2 - z2_bis * y1) == 0) and (np.abs(z2_bis * x1 - z1_bis * x2) == 0):
             self.Qi[0, 1] = (np.arctan2(-np.sqrt(1 - c2 * c2), c2)) % (2 * np.pi)
         else:
             self.Qi[0, 1] = (np.arctan2(s12_bis, c12_bis) - self.Qi[1, 1]) % (2 * np.pi)

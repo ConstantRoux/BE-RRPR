@@ -3,6 +3,7 @@ import numpy as np
 from model.gcode.Command import Command
 from model.geometrics.ArcXY import ArcXY
 from model.geometrics.Line import Line
+from model.models.MGI import MGI
 
 
 class GcodeInterpreter:
@@ -42,15 +43,23 @@ class GcodeInterpreter:
                 M_t = np.append(M_t, M, axis=1)
                 t_t = np.append(t_t, t + t_t[-1])
             elif command.type == "clockwise":
-                t, M, _, _M = ArcXY(self.law, self.H, self.L).get_M(self.current_pos, command.B, command.C, self.V, True)
+                t, M, _, _M = ArcXY(self.law, self.H, self.L).get_M(self.current_pos, command.B, command.C, self.V,
+                                                                    True)
                 M_t = np.append(M_t, M, axis=1)
                 t_t = np.append(t_t, t + t_t[-1])
             elif command.type == "anticlockwise":
-                t, M, _, _ = ArcXY(self.law, self.H, self.L).get_M(self.current_pos, command.B, command.C, self.V, False)
+                t, M, _, _ = ArcXY(self.law, self.H, self.L).get_M(self.current_pos, command.B, command.C, self.V,
+                                                                   False)
                 M_t = np.append(M_t, M, axis=1)
                 t_t = np.append(t_t, t + t_t[-1])
             self.current_pos = command.B
         return t_t, M_t
 
-    def get_Q(self):
-        pass
+    def get_Q(self, t, M, theta):
+        mgi = MGI(self.H, self.L)
+        q = np.zeros((4, t.shape[0]))
+        q_bis = np.zeros((4, t.shape[0]))
+        for i in range(t.shape[0]):
+            q[:, i], q_bis[:, i] = mgi.get_Qi(M[0, i], M[1, i], M[2, i], theta)
+
+        return q, q_bis
