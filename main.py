@@ -1,25 +1,23 @@
-import matplotlib.pyplot as plt
-
 from model.gcode.GcodeInterpreter import GcodeInterpreter
 from model.geometrics.ArcXY import ArcXY
-import numpy as np
-
 from model.geometrics.GcodePath import GcodePath
-from model.geometrics.Geometric import Geometric
 from model.geometrics.Line import Line
 from model.laws.SpeedTriangleLaw import SpeedTriangleLaw
 from model.models.MGD import MGD
+import numpy as np
 
 if __name__ == '__main__':
     # variables
-    A = np.array([[2], [0], [3]])
-    B = np.array([[4], [-2], [3]])
+    A = np.array([[0], [0], [3]])
+    B = np.array([[4], [4], [3]])
+    AC = np.array([[2], [0], [3]])
+    BC = np.array([[4], [-2], [3]])
     C = np.array([[4.], [0.], [3.]])
-    theta = np.pi / 4
+    theta = np.pi / 2
     V = 1
     Te = 0.01
     H = np.array([1, 1])
-    L = np.array([2, 4, 2, 2, 2])
+    L = np.array([1/4, 4, 2, 2, 1/4])
 
     # loi de commande
     law = SpeedTriangleLaw(Te)
@@ -41,8 +39,8 @@ if __name__ == '__main__':
 
     # cercle
     c = ArcXY(law, H, L)
-    t, M, dM, d2M = c.get_M(A, B, C, V, True)
-    _, q, q_bis, dq, dq_bis = c.traj(A, B, C, V, True, theta)
+    t, M, dM, d2M = c.get_M(AC, BC, C, V, True)
+    _, q, q_bis, dq, dq_bis = c.traj(AC, BC, C, V, True, theta)
     c.plot_M(t, M, dM, d2M)
     c.plot3D_M(t, M, theta)
     c.plot_Q(t, q, q_bis)

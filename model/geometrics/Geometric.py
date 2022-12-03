@@ -95,7 +95,7 @@ class Geometric(ABC):
 
             ax.text(M[0, -1], M[1, -1], M[2, -1], 'B', color='red')
 
-            labels = ['O_0', 'O_1', 'O_2', 'O_3', 'O_4', 'O_5']
+            labels = [r'$O_0$', r'$O_1$', r'$O_2$', r'$O_3$', r'$O_4$', r'$O_5$']
             c_r = np.zeros((12, 3))
             c_r2 = np.zeros((12, 3))
             for i in range(2, 12, 2):
@@ -112,7 +112,7 @@ class Geometric(ABC):
                 ax.text(c_r2[2 * i + 1, 0], c_r2[2 * i + 1, 1], c_r2[2 * i + 1, 2], txt, color='green')
                 if i == 5:
                     mgd.get_T05(q[:, j[0]])
-                    theta = math.atan2(mgd.T05[1, 0], mgd.T05[0, 0])
+                    theta = np.arctan2(mgd.T05[1, 0], mgd.T05[0, 0])
                     X = mgd.T05[0, 3]
                     Y = mgd.T05[1, 3]
                     Z = mgd.T05[2, 3]
@@ -123,7 +123,7 @@ class Geometric(ABC):
                         theta * 180. / np.pi, X, Y, Z))
 
                     mgd2.get_T05(q_bis[:, j[0]])
-                    theta = math.atan2(mgd2.T05[1, 0], mgd2.T05[0, 0])
+                    theta = np.arctan2(mgd2.T05[1, 0], mgd2.T05[0, 0])
                     X = mgd2.T05[0, 3]
                     Y = mgd2.T05[1, 3]
                     Z = mgd2.T05[2, 3]

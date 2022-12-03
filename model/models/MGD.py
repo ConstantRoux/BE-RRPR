@@ -85,7 +85,7 @@ class MGD:
                 ax.text(c_r[2 * i + 1, 0], c_r[2 * i + 1, 1], c_r[2 * i + 1, 2], txt, color='red')
                 if i == 5:
                     self.get_T05(q)
-                    theta = math.atan2(self.T05[1, 0], self.T05[0, 0])
+                    theta = np.arctan2(self.T05[1, 0], self.T05[0, 0])
                     X = self.T05[0, 3]
                     Y = self.T05[1, 3]
                     Z = self.T05[2, 3]
