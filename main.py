@@ -17,7 +17,7 @@ if __name__ == '__main__':
     V = 1
     Te = 0.01
     H = np.array([1, 1])
-    L = np.array([2, 4, 2, 2, 2])
+    L = np.array([1, 4, 2, 2, 1])
 
     # loi de commande
     law = SpeedTriangleLaw(Te)
@@ -32,12 +32,15 @@ if __name__ == '__main__':
     t, M, dM, d2M = l.get_M(A, B, V)
     _, q, q_bis, dq, dq_bis = l.traj(A, B, V, theta)
     l.plot_M(t, M, dM, d2M)
+    l.plot_theta(t, theta)
     l.plot3D_M(t, M, theta)
+    l.plot_O5(t, q, dq, dM)
     l.plot_Q(t, q, q_bis)
     l.plot_dQ(t, dq, dq_bis)
     l.plot3D_Q(t, M, q, q_bis)
 
     # cercle
+    L = np.array([2, 4, 2, 2, 2])
     c = ArcXY(law, H, L)
     t, M, dM, d2M = c.get_M(AC, BC, C, V, True)
     _, q, q_bis, dq, dq_bis = c.traj(AC, BC, C, V, True, theta)

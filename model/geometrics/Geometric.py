@@ -1,10 +1,8 @@
-import math
 from abc import ABC, abstractmethod
-
 import numpy as np
 from matplotlib import pyplot as plt, animation
 from matplotlib.widgets import Slider
-
+from model.models.MDD import MDD
 from model.models.MGD import MGD
 
 
@@ -212,4 +210,45 @@ class Geometric(ABC):
 
         anim = animation.FuncAnimation(f, animate, frames=t.shape[0], interval=self.law.Te, blit=True)
 
+        plt.show()
+
+    def plot_theta(self, t, theta):
+        f, ax = plt.subplots()
+        vec = np.ones((t.shape[0],)) * theta
+        ax.axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
+        plt.scatter(t, vec)
+        plt.show()
+
+    def plot_O5(self, t, q, dq, dM):
+        mdd = MDD(self.L)
+        dx = np.zeros((4, q.shape[1]))
+        for i in range(q.shape[1]):
+            dx[:, i] = np.dot(mdd.get_jacobienne(q[:, i]), dq[:, i])
+
+        fig, axs = plt.subplots(3, 2)
+        axs[0, 0].scatter(t, dx[0, :], s=2)
+        axs[0, 0].set_title('x\'(t)')
+        axs[0, 0].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
+
+        axs[1, 0].scatter(t, dx[1, :], s=2)
+        axs[1, 0].set_title('y\'(t)')
+        axs[1, 0].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
+
+        axs[2, 0].scatter(t, dx[2, :], s=2)
+        axs[2, 0].set_title('z\'(t)')
+        axs[2, 0].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
+
+        axs[0, 1].scatter(t, dM[0], s=2)
+        axs[0, 1].set_title('x\'(t) attendu')
+        axs[0, 1].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
+
+        axs[1, 1].scatter(t, dM[1], s=2)
+        axs[1, 1].set_title('y\'(t) attendu')
+        axs[1, 1].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
+
+        axs[2, 1].scatter(t, dM[2], s=2)
+        axs[2, 1].set_title('z\'(t) attendu')
+        axs[2, 1].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
+
+        fig.subplots_adjust(hspace=0.5, wspace=0.25)
         plt.show()

@@ -1,5 +1,3 @@
-
-
 from model.geometrics.Geometric import Geometric
 
 
