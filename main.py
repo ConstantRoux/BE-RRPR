@@ -17,7 +17,7 @@ if __name__ == '__main__':
     V = 1
     Te = 0.01
     H = np.array([1, 1])
-    L = np.array([1, 4, 2, 2, 1])
+    L = np.array([2, 4, 2, 2, 1])
 
     # loi de commande
     law = SpeedTriangleLaw(Te)
