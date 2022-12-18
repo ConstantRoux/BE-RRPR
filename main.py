@@ -8,16 +8,16 @@ import numpy as np
 
 if __name__ == '__main__':
     # variables
-    A = np.array([[0], [0], [3]])
-    B = np.array([[4], [4], [3]])
+    A = np.array([[2], [0], [3]])
+    B = np.array([[9], [0], [3]])
     AC = np.array([[2], [0], [3]])
     BC = np.array([[4], [-2], [3]])
     C = np.array([[4.], [0.], [3.]])
-    theta = np.pi / 2
+    theta = 0
     V = 1
     Te = 0.01
     H = np.array([1, 1])
-    L = np.array([2, 4, 2, 2, 1])
+    L = np.array([1, 4, 2, 2, 1])
 
     # loi de commande
     law = SpeedTriangleLaw(Te)

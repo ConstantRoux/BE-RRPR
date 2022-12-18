@@ -61,5 +61,7 @@ class GcodeInterpreter:
         q_bis = np.zeros((4, t.shape[0]))
         for i in range(t.shape[0]):
             q[:, i], q_bis[:, i] = mgi.get_Qi(M[0, i], M[1, i], M[2, i], theta)
+        q = mgi.fix_singularities(q, theta)
+        q_bis = mgi.fix_singularities(q_bis, theta)
 
         return q, q_bis
