@@ -15,10 +15,10 @@ class MGI:
     def fix_singularities(self, Q, theta):
         for i in range(Q.shape[1]):
             if Q[0, i] != Q[0, i]:
-                if i == Q.shape[1] - 1:
-                    Q[0, i] = Q[0, i - 1]
+                if i == 0:
+                    Q[0, i] = 0
                 else:
-                    Q[0, i] = Q[0, i + 1]
+                    Q[0, i] = Q[0, i - 1]
                 Q[3, i] = (theta - Q[0, i] - Q[1, i]) % (2 * np.pi)
         return Q
 
@@ -32,7 +32,7 @@ class MGI:
         self.Qi[1, 1] = (np.arctan2(-np.sqrt(1 - c2 * c2), c2)) % (2 * np.pi)
 
         # calcul de q1
-        if X - self.L[4] * np.cos(theta) == self.L[0] and Y - self.L[4] * np.sin(theta) == 0:
+        if np.round(X - self.L[4] * np.cos(theta), 5) == self.L[0] and np.round(Y - self.L[4] * np.sin(theta), 5) == 0:
             print("Singularité 1 !")
             self.Qi[0, 0] = None
             self.Qi[0, 1] = None

@@ -8,6 +8,6 @@ class MDI:
         self.mdd = MDD(L)
 
     def get_dq(self, dM, q):
-        inv_J = np.linalg.inv(self.mdd.get_jacobienne(q))
+        inv_J = np.linalg.pinv(self.mdd.get_jacobienne(q))
         dq = np.dot(inv_J, np.transpose(dM))
         return dq
