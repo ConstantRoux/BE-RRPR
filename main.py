@@ -45,7 +45,7 @@ def test_line_singularities():
 
     theta = 0
     V = 1
-    Te = 0.01
+    Te = 0.005
     H = np.array([1, 1])
     L = np.array([1, 4, 2, 2, 1])
 
