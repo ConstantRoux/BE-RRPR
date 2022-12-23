@@ -22,6 +22,7 @@ class Geometric(ABC):
 
     def plot_Q(self, t, q, q_bis):
         fig, axs = plt.subplots(4)
+        fig.suptitle(r'Trajectoire des courbes en $q$ en fonction du temps')
         axs[0].scatter(t, q[0], c='blue', s=2)
         axs[0].scatter(t, q_bis[0], c='green', s=2)
         axs[0].legend(['q1', 'q1 bis'])
@@ -46,6 +47,7 @@ class Geometric(ABC):
 
     def plot_dQ(self, t, dq, dq_bis):
         fig, axs = plt.subplots(4)
+        fig.suptitle(r'Trajectoire des courbes en $\dot{q}$ en fonction du temps')
         axs[0].scatter(t, dq[0], c='blue', s=2)
         axs[0].scatter(t, dq_bis[0], c='green', s=2)
         axs[0].legend([r'$\dot{q}_1$', r'$\dot{q}_{1bis}$'])
@@ -70,6 +72,7 @@ class Geometric(ABC):
 
     def plot3D_Q(self, t, M, q, q_bis, step=1):
         f, ax = plt.subplots()
+        f.suptitle(r'Visualisation du bras manipulateur lors de la trajectoire en 3D')
         ax_q = [None]
         sl_q = [None]
         ax = plt.axes(projection='3d')
@@ -154,6 +157,7 @@ class Geometric(ABC):
 
     def plot_M(self, t, M, dM, d2M):
         fig, axs = plt.subplots(3, 3)
+        fig.suptitle(r'Trajectoire du point $M$ et ses dérivées sur chaque axe en fonction du temps')
 
         axs[0, 0].scatter(t, M[0], s=2)
         axs[0, 0].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
@@ -190,6 +194,7 @@ class Geometric(ABC):
 
     def plot3D_M(self, t, M, theta):
         f, ax = plt.subplots()
+        f.suptitle(r'Visualisation de la trajectoire du point $M$ en 3D')
         ax = plt.axes(projection='3d')
         ax.set_aspect('equal')
         ax.axes.set_xlim3d(left=np.min(M[0]), right=np.max(M[0]))
@@ -214,6 +219,7 @@ class Geometric(ABC):
 
     def plot_theta(self, t, theta):
         f, ax = plt.subplots()
+        f.suptitle(r'Trajectoire de $\theta$ en fonction du temps')
         vec = np.ones((t.shape[0],)) * theta
         ax.axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')
         plt.scatter(t, vec)
@@ -226,6 +232,7 @@ class Geometric(ABC):
             dx[:, i] = np.dot(mdd.get_jacobienne(q[:, i]), dq[:, i])
 
         fig, axs = plt.subplots(3, 2)
+        fig.suptitle(r'Comparaison de la vitesse du point $O_5$ obtenue avec la jacobienne avec la vitesse attendue en fonction du temps')
         axs[0, 0].scatter(t, dx[0, :], s=2)
         axs[0, 0].set_title('x\'(t)')
         axs[0, 0].axvline(t[int(t.shape[0] / 2)], linestyle='dashdot', c='red')

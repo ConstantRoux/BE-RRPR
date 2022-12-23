@@ -65,6 +65,7 @@ class MGD:
 
     def plot3D(self):
         f, ax = plt.subplots()
+        f.suptitle(r'Visualisation du MGD')
         ax_q = [None] * 4
         sl_q = [None] * 4
         ax = plt.axes(projection='3d')
