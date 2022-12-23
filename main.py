@@ -15,14 +15,14 @@ def test_mgd():
 
 
 def test_line():
-    A = np.array([[3], [0], [3]])
-    B = np.array([[7], [6], [5]])
+    A = np.array([[0], [1], [8]])
+    B = np.array([[4], [1], [8]])
 
     theta = 0
     V = 1
     Te = 0.01
     H = np.array([1, 1])
-    L = np.array([1, 4, 2, 2, 1])
+    L = np.array([1, 1, 1, 1, 1])
 
     law = SpeedTriangleLaw(Te)
     law.plot_s(np.linalg.norm(B - A), V)
